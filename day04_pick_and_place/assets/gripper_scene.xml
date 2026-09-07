@@ -1,0 +1,300 @@
+<mujoco model="two_link_gripper">
+
+    <option
+        timestep="0.002"
+        gravity="0 0 -9.81"
+    />
+
+    <default>
+
+        <geom
+            friction="1.5 0.1 0.01"
+        />
+
+    </default>
+
+
+    <worldbody>
+
+        <!-- ==============================
+             Ground
+        =============================== -->
+
+        <geom
+            name="ground"
+            type="plane"
+            size="5 5 0.1"
+        />
+
+
+        <!-- ==============================
+             Robot base
+        =============================== -->
+
+        <body
+            name="base"
+            pos="0 0 0.15"
+        >
+
+            <geom
+                name="base_geom"
+                type="cylinder"
+                size="0.15 0.15"
+            />
+
+
+            <!-- ==========================
+                 Link 1
+            =========================== -->
+
+            <body
+                name="link1"
+                pos="0 0 0.15"
+            >
+
+                <joint
+                    name="joint1"
+                    type="hinge"
+                    axis="0 0 1"
+                    damping="0.2"
+                />
+
+                <geom
+                    name="link1_geom"
+                    type="capsule"
+                    fromto="0 0 0 1 0 0"
+                    size="0.05"
+                />
+
+
+                <!-- ======================
+                     Link 2
+                ======================= -->
+
+                <body
+                    name="link2"
+                    pos="1 0 0"
+                >
+
+                    <joint
+                        name="joint2"
+                        type="hinge"
+                        axis="0 0 1"
+                        damping="0.2"
+                    />
+
+                    <geom
+                        name="link2_geom"
+                        type="capsule"
+                        fromto="0 0 0 0.9 0 0"
+                        size="0.05"
+                    />
+
+
+                    <!-- ==================
+                         Gripper base
+                    =================== -->
+
+                    <body
+                        name="gripper_base"
+                        pos="0.9 0 0"
+                    >
+
+                        <geom
+                            name="gripper_base_geom"
+                            type="box"
+                            size="0.05 0.10 0.05"
+                        />
+
+
+                        <!-- Left finger -->
+
+                        <body
+                            name="left_finger"
+                            pos="0.12 0.12 0"
+                        >
+
+                            <joint
+                                name="left_finger_joint"
+                                type="slide"
+                                axis="0 -1 0"
+                                range="0 0.08"
+                                damping="1.0"
+                            />
+
+                            <geom
+                                name="left_finger_geom"
+                                type="box"
+                                size="0.08 0.025 0.10"
+                                friction="2.0 0.1 0.01"
+                            />
+
+                        </body>
+
+
+                        <!-- Right finger -->
+
+                        <body
+                            name="right_finger"
+                            pos="0.12 -0.12 0"
+                        >
+
+                            <joint
+                                name="right_finger_joint"
+                                type="slide"
+                                axis="0 1 0"
+                                range="0 0.08"
+                                damping="1.0"
+                            />
+
+                            <geom
+                                name="right_finger_geom"
+                                type="box"
+                                size="0.08 0.025 0.10"
+                                friction="2.0 0.1 0.01"
+                            />
+
+                        </body>
+
+
+                        <!-- 末端中心点 -->
+
+                        <site
+                            name="ee_site"
+                            pos="0.12 0 0"
+                            type="sphere"
+                            size="0.025"
+                        />
+
+                    </body>
+
+                </body>
+
+            </body>
+
+        </body>
+
+
+        <!-- ==============================
+             Dynamic cube
+        =============================== -->
+
+        <body
+            name="cube"
+            pos="1.2 0.6 0.30"
+        >
+
+            <!-- 允许方块在水平面 x-y 中自由移动 -->
+            <joint
+                name="cube_x"
+                type="slide"
+                axis="1 0 0"
+                damping="0.1"
+            />
+
+            <joint
+                name="cube_y"
+                type="slide"
+                axis="0 1 0"
+                damping="0.1"
+            />
+
+            <!-- 允许方块绕 z 轴旋转 -->
+            <joint
+                name="cube_yaw"
+                type="hinge"
+                axis="0 0 1"
+                damping="0.05"
+            />
+
+            <geom
+                name="cube_geom"
+                type="box"
+                size="0.06 0.06 0.06"
+                mass="0.15"
+                friction="2.0 0.1 0.01"
+            />
+
+        </body>
+
+
+        <!-- Place target -->
+
+        <site
+            name="place_target"
+            pos="0.6 1.3 0.10"
+            type="sphere"
+            size="0.08"
+        />
+
+    </worldbody>
+
+
+    <!-- ==============================
+         Collision exclusions
+    =============================== -->
+
+    <contact>
+
+        <exclude
+            body1="base"
+            body2="link1"
+        />
+
+        <exclude
+            body1="link1"
+            body2="link2"
+        />
+
+        <exclude
+            body1="link2"
+            body2="gripper_base"
+        />
+
+    </contact>
+
+
+    <!-- ==============================
+         Actuators
+    =============================== -->
+
+    <actuator>
+
+        <motor
+            name="motor1"
+            joint="joint1"
+            gear="1"
+            ctrllimited="true"
+            ctrlrange="-20 20"
+        />
+
+        <motor
+            name="motor2"
+            joint="joint2"
+            gear="1"
+            ctrllimited="true"
+            ctrlrange="-20 20"
+        />
+
+
+        <!-- 用 position actuator 控制夹爪更方便 -->
+
+        <position
+            name="left_gripper_act"
+            joint="left_finger_joint"
+            kp="300"
+            ctrllimited="true"
+            ctrlrange="0 0.08"
+        />
+
+        <position
+            name="right_gripper_act"
+            joint="right_finger_joint"
+            kp="300"
+            ctrllimited="true"
+            ctrlrange="0 0.08"
+        />
+
+    </actuator>
+
+</mujoco>

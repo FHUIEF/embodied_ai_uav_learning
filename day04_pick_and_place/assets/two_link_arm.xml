@@ -1,0 +1,99 @@
+<mujoco model="two_link_arm">
+
+    <option timestep="0.002" gravity="0 0 -9.81"/>
+
+    <worldbody>
+
+        <!-- 地面 -->
+        <geom
+            name="ground"
+            type="plane"
+            size="5 5 0.1"
+        />
+
+        <!-- 基座 -->
+        <body name="base" pos="0 0 0.15">
+
+            <geom
+                type="cylinder"
+                size="0.15 0.15"
+            />
+
+            <!-- 第一根机械臂link1 -->
+            <body name="link1" pos="0 0 0.15">
+
+                <!-- 旋转关节 -->
+                <joint
+                    name="joint1"
+                    type="hinge"
+                    axis="0 0 1"
+                    damping="0.1"
+                />
+
+                <!-- 连杆 -->
+                <geom
+                    name="link1_geom"
+                    type="capsule"
+                    fromto="0 0 0 1 0 0"
+                    size="0.06"
+                />
+
+                <!-- 第二根机械臂 -->
+                <body name="link2" pos="1 0 0">
+
+                    <!-- 旋转关节 -->
+                    <joint
+                        name="joint2"
+                        type="hinge"
+                        axis="0 0 1"
+                        damping="0.1"
+                    />
+
+                    <!-- 连杆 -->
+                    <geom
+                        name="link2_geom"
+                        type="capsule"
+                        fromto="0 0 0 1 0 0"
+                        size="0.06"
+                    />
+
+                </body>
+
+            </body>
+
+        </body>
+        
+        <site
+            name="target_site"
+            pos="1.2 0.8 0.30"
+            type="sphere"
+            size="0.06"
+        />
+    </worldbody>
+
+    <contact>
+        <exclude body1="base" body2="link1"/>
+        <exclude body1="link1" body2="link2"/>
+    </contact>
+
+    <actuator>
+    
+        <motor
+            name="motor1"
+            joint="joint1"
+            gear="1"
+            ctrllimited="true"
+            ctrlrange="-20 20"
+        />
+
+        <motor
+            name="motor2"
+            joint="joint2"
+            gear="1"
+            ctrllimited="true"
+            ctrlrange="-20 20"
+        />
+
+    </actuator>
+
+</mujoco>
