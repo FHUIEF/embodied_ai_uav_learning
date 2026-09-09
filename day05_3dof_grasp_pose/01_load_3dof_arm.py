@@ -18,12 +18,9 @@ model = mujoco.MjModel.from_xml_path(xml_path)
 data = mujoco.MjData(model)
 
 print("==== Model Information ====")
-print("nq = ", model.nq)    # 广义坐标数量，qpos长度
-print("nv = ", model.nv)    # 广义速度数量，qvel长度
-print("nu = ", model.nu)    # 控制输入数量，data.ctrl长度
-print("nbody = ", model.nbody)  # body数量
-print("ngeom = ", model.ngeom)  # 几何体数量，例：碰撞体、可视化网格、地面、桌子
-
+print("nq = ", model.nq)
+print("nv = ", model.nv)
+print("nu = ", model.nu)
 
 # 设置一个初始姿态
 data.qpos[:] = np.deg2rad([
