@@ -1,6 +1,6 @@
-""""
+"""
 3DOF Joint PD Control
-""""
+"""
 
 import os
 import time
