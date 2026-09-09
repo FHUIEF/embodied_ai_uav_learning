@@ -19,16 +19,17 @@ xml_path = os.path.join(
     "scene.xml"
 )
 
-print("Loading XML: ")
-print(xml_path)
+print("Loading XML: ", xml_path)
 
 # ============================================================
 # 2. 加载 Mujoco Model
 # ============================================================
 
-model = mujoco.MjModel.from_xml_path(xml_path)  # 机器人模型的固定结构和参数
+# 机器人模型的固定结构和参数
+model = mujoco.MjModel.from_xml_path(xml_path)  
 
-data = mujoco.MjData(model) # 运行状态
+# 运行状态
+data = mujoco.MjData(model) 
 
 # ============================================================
 # 3. 打印基本模型信息
@@ -37,11 +38,12 @@ print("\n==== Model Information ====")
 
 print("nq = ", model.nq)    # 关节自由度数量
 print("nv = ", model.nv)    # 速度自由度数量
-print("nu = ", model.nu)    # 控制输入数量
+print("nu = ", model.nu)    # 控制输入数量（执行器数量）
 
-print("njnt = ", model.njnt)
-print("nbody = ", model.nbody)
-print("ngeom = ", model.ngeom)
+print("nbody = ", model.nbody)  # body数量
+print("njnt = ", model.njnt)    # joint 数量
+print("ngeom = ", model.ngeom)  # 几何体数量，例：碰撞体、可视化网格、地面、桌子
+print("nsite = ", model.nsite)  # 接触点数量
 
 # ============================================================
 # 4. 打印所有 Joint 名字

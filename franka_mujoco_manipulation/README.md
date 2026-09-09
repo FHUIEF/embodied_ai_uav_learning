@@ -1,8 +1,8 @@
 # Franka Panda MuJoCo 经典 Manipulation 项目复习文档
 
-> 项目目标：基于 MuJoCo 与 Franka Panda，完整走通“模型加载 → 状态读取 → FK → 关节控制 → 3D/6D IK → TCP → 夹爪 → 物体接触 → Pregrasp → Grasp → Lift → Pick-and-Place → 平滑轨迹 → 奇异性分析 → DLS → Adaptive DLS → Null-space Control”的经典机器人 Manipulation 技术链。
+> 项目目标：基于 MuJoCo 与 Franka Panda，完整走通“**模型加载** → **状态读取** → **FK** → **关节控制** → **3D/6D IK** → **TCP** → **夹爪** → **物体接触** → **Pregrasp** → **Grasp** → **Lift** → **Pick-and-Place** → **平滑轨迹** → **奇异性分析** → **DLS** → **Adaptive DLS** → **Null-space Control**”的经典机器人 Manipulation 技术链。
 >
-> 本文按项目实际学习顺序整理，既包含代码中使用的知识，也包含项目过程中反复提问、调试和理解过的关键概念，目标是方便之后复习、写 README、准备面试和写简历。
+> 本文按项目实际学习顺序整理，包含代码中：知识、调试。
 
 ---
 
@@ -144,15 +144,15 @@ model = mujoco.MjModel.from_xml_path(xml_path)
 
 包括：
 
-- body 数量；
-- joint 类型；
-- joint range；
-- actuator；
+- **body 数量；**
+- **joint 类型；**
+- **joint range；**
+- **actuator；**
 - mass；
 - inertia；
-- geom；
-- collision；
-- site；
+- **geom；**
+- **collision；**
+- **site；**
 - tendon；
 - equality；
 - timestep；
@@ -170,20 +170,25 @@ data = mujoco.MjData(model)
 
 可以理解为：
 
-> 当前这一时刻仿真系统的动态状态。
+> 当前这一时刻仿真系统的**动态状态**。
 
 包括：
 
 ```python
-data.qpos
-data.qvel
-data.qacc
-data.ctrl
-data.xpos
-data.xmat
-data.xquat
-data.contact
-data.ncon
+# 关节运动状态
+data.qpos	# 广义位置，各关节当前的位置/角度
+data.qvel	# 广义速度, 各个关节当前速度
+data.qacc	# 广义加速度，各个关节当前加速度
+data.ctrl	# 控制输入
+
+# 正向运动学计算得到的物体空间位姿
+data.xpos	# 每个body（刚体）在世界坐标系中的三维位置
+data.xmat	# 每个body 当前的旋转矩阵
+data.xquat	# body的姿态，使用的是四元数
+
+# 碰撞相关	
+data.contact	# 具体每一个接触的信息。哪两个geom接触、接触点位置、接触法向、接触距离
+data.ncon	# 当前这一仿真时刻，一共有多少个接触点
 ```
 
 关系可以总结为：
