@@ -83,13 +83,14 @@ arm_qpos_adr = []
 
 arm_dof_adr = []
 
+# 获取机械臂关节的 qpos / qvel address
 for joint_id in arm_joint_ids:
 
-    # joint对应的关节位置 在 qpos 中的地址
+    # 关节的位置数据在 data.qpos 中的地址
     qpos_adr = model.jnt_qposadr[joint_id]
 
-    # joint对应的速度 在 qvel 中的地址
-    dof_adr = model.jnt_dofadr[joint_id]
+    # 关节的速度数据在 data.qvel 中的地址
+    dof_adr = model.jnt_dofadr  [joint_id]
 
     arm_qpos_adr.append(qpos_adr)
 
@@ -101,11 +102,12 @@ finger_qpos_adr = []
 finger_dof_adr = []
 
 
-for joint_id in finger_joint_ids:
+# 获取夹爪关节的 qpos / qvel address
+for finger_joint_id in finger_joint_ids:
 
-    qpos_adr = model.jnt_qposadr[joint_id]
+    qpos_adr = model.jnt_qposadr[finger_joint_id]
 
-    dof_adr = model.jnt_dofadr[joint_id]
+    dof_adr = model.jnt_dofadr[finger_joint_id]
 
     finger_qpos_adr.append(qpos_adr)
 
@@ -139,6 +141,7 @@ print("\nHand body ID:", hand_body_id)
 
 arm_actuator_ids = []
 
+# 获取机械臂的 actuator id
 for i in range(1, 8):
 
     actuator_name = f"actuator{i}"
@@ -152,6 +155,7 @@ for i in range(1, 8):
     arm_actuator_ids.append(actuator_id)
 
 
+# 获取夹爪的 actuator id
 gripper_actuator_id = mujoco.mj_name2id(
     model,
     mujoco.mjtObj.mjOBJ_ACTUATOR,
