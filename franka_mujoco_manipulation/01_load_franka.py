@@ -45,6 +45,13 @@ print("njnt = ", model.njnt)    # joint 数量
 print("ngeom = ", model.ngeom)  # 几何体数量，例：碰撞体、可视化网格、地面、桌子
 print("nsite = ", model.nsite)  # 接触点数量
 
+# 关节属性
+print(model.jnt_type)        # 关节类型
+print(model.jnt_qposadr)     # 关节在 qpos 中的起始地址
+print(model.jnt_dofadr)     # 关节在 qvel 中的起始地址
+print(model.jnt_bodyid)      # 关节所属的 body id
+print(model.jnt_pos)         # 关节位置
+
 # ============================================================
 # 4. 打印所有 Joint 名字
 # ============================================================
