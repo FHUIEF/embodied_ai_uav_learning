@@ -1,3 +1,4 @@
+"""更换初始关节状态，fk重新计算位姿"""
 import os
 import time
 
