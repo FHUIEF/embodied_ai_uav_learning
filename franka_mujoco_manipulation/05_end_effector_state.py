@@ -1,3 +1,4 @@
+"""计算末端hand的位姿（位置+姿态）"""
 import os
 import time
 
@@ -57,7 +58,7 @@ hand_body_id = mujoco.mj_name2id(
 )
 
 # ============================================================
-# 4. 初始化到 home
+# 4. 初始化到 home的姿态
 # ============================================================
 
 home_key_id = mujoco.mj_name2id(
@@ -102,5 +103,3 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         viewer.sync()
 
         time.sleep(0.01)
-
-# site_xpos 问题
